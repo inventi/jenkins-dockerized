@@ -8,7 +8,10 @@ RUN mkdir -p /home/jenkins && \
     chown -R jenkins:jenkins /home/jenkins
 
 RUN apt-get update && \
-    apt-get install -y eatmydata openjdk-7-jre-headless maven2
+    apt-get install -y eatmydata openjdk-7-jre-headless
+
+RUN curl http://apache.mirror.serveriai.lt/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz | tar -xz &&\
+    ln -s apache-maven-3.3.9/bin/mvn /usr/local/bin/mvn
 
 ENV AGENT_NAME noderunner
 ENV JENKINS_HOST jenkins:8080
