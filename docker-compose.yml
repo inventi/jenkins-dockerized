@@ -1,0 +1,46 @@
+version: '2'
+services:
+
+  cljrunner:
+    build: ./cljrunner
+    image: inventi/cljrunner
+    volumes:
+      - ./work/cljrunner-ws:/var/jenkins-slave
+      - ./work/runner-home:/home/jenkins
+    links:
+      - master:jenkins
+    depends_on:
+      - jenkins-slave
+
+  noderunner:
+    build: ./noderunner
+    image: inventi/noderunner
+    volumes:
+      - ./work/noderunner-ws:/var/jenkins-slave
+      - ./work/runner-home:/home/jenkins
+    links:
+      - master:jenkins
+    depends_on:
+      - jenkins-slave
+
+  javarunner:
+    build: ./javarunner
+    image: inventi/javarunner
+    volumes:
+      - ./work/javarunner-ws:/var/jenkins-slave
+      - ./work/runner-home:/home/jenkins
+    links:
+      - master:jenkins
+    depends_on:
+      - jenkins-slave
+
+  master:
+    image: jenkins
+    volumes:
+      - ./data/jenkins-home:/var/jenkins_home
+    ports:
+      - "8080:8080"
+
+  jenkins-slave:
+    build: ./jenkins-slave
+    image: inventi/jenkins-slave
