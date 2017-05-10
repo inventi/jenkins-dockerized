@@ -1,9 +1,9 @@
-FROM jenkins
+FROM jenkins:2.46.2
 USER root
 
-RUN apt-get update && apt-get install -y sudo
-RUN adduser jenkins sudo
-RUN echo "jenkins    ALL= NOPASSWD: ALL" > /etc/sudoers.d/jenkins
-RUN curl https://get.docker.com/builds/Linux/x86_64/docker-1.6.2 > /usr/bin/docker
-RUN chmod +x /usr/bin/docker
+RUN curl https://get.docker.com/builds/Linux/x86_64/docker-17.05.0-ce.tgz | tar xvz &&\
+    mv /docker/docker /usr/bin/docker &&\
+    chmod +x /usr/bin/docker &&\
+    rm -rf /docker
+
 USER jenkins
