@@ -1,4 +1,4 @@
-from java:7
+from java:8
 
 RUN apt-get update &&\
     apt-get install -y xvfb &&\
@@ -14,4 +14,11 @@ RUN mkdir -p /home/jenkins && \
     useradd -u 431 -r -g jenkins -d /home/jenkins -c "Jenkins user" jenkins && \
     chown -R jenkins:jenkins /home/jenkins
 
-USER jenkins
+RUN curl https://get.docker.com/builds/Linux/x86_64/docker-17.05.0-ce.tgz | tar xvz &&\
+    mv /docker/docker /usr/bin/docker &&\
+    chmod +x /usr/bin/docker &&\
+    rm -rf /docker
+
+ADD run-slave.sh /run-slave.sh
+
+CMD "/run-slave.sh"
