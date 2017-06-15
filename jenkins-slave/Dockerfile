@@ -1,8 +1,7 @@
-from java:8
+from java:8-jdk-alpine
 
-RUN apt-get update &&\
-    apt-get install -y xvfb &&\
-    apt-get clean
+RUN apk add --update xvfb curl &&\
+    rm -rf /var/cache/apk/*
 
 ADD xvfb /etc/init.d/
 RUN chmod 755 /etc/init.d/xvfb
@@ -10,8 +9,8 @@ RUN chmod 755 /etc/init.d/xvfb
 ENV DISPLAY :1.0
 
 RUN mkdir -p /home/jenkins && \
-    groupadd -r jenkins -g 433 && \
-    useradd -u 431 -r -g jenkins -d /home/jenkins -c "Jenkins user" jenkins && \
+    addgroup -g 433 jenkins && \
+    adduser -s /bin/sh -D -u 431 -G jenkins -h /home/jenkins jenkins && \
     chown -R jenkins:jenkins /home/jenkins
 
 RUN curl https://get.docker.com/builds/Linux/x86_64/docker-17.05.0-ce.tgz | tar xvz &&\

@@ -23,7 +23,7 @@ services:
       - jenkins-slave
 
   jenkins:
-    image: jenkins
+    image: jenkins:alpine
     volumes:
       - ./data/jenkins-home:/var/jenkins_home
     ports:

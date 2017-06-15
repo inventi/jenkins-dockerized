@@ -1,5 +1,8 @@
 from inventi/jenkins-slave
 
+RUN apk add --update bash &&\
+    rm -rf /var/cache/apk/*
+
 RUN curl -o /usr/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein &&\
     chmod a+x /usr/bin/lein &&\
     su jenkins -c lein
