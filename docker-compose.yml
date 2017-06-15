@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
 
   cljrunner:
@@ -7,20 +7,8 @@ services:
     volumes:
       - ./work/cljrunner-ws:/var/jenkins-slave
       - ./work/runner-home:/home/jenkins
-    links:
-      - master:jenkins
     depends_on:
-      - jenkins-slave
-
-  noderunner:
-    build: ./noderunner
-    image: inventi/noderunner
-    volumes:
-      - ./work/noderunner-ws:/var/jenkins-slave
-      - ./work/runner-home:/home/jenkins
-    links:
-      - master:jenkins
-    depends_on:
+      - jenkins
       - jenkins-slave
 
   javarunner:
@@ -30,17 +18,16 @@ services:
       - ./work/javarunner-ws:/var/jenkins-slave
       - ./work/runner-home:/home/jenkins
       - /var/run/docker.sock:/var/run/docker.sock
-    links:
-      - master:jenkins
     depends_on:
+      - jenkins
       - jenkins-slave
 
-  master:
+  jenkins:
     image: jenkins
     volumes:
       - ./data/jenkins-home:/var/jenkins_home
     ports:
-      - "8080:8080"
+      - 8080:8080
 
   jenkins-slave:
     build: ./jenkins-slave

@@ -10,5 +10,15 @@ if [ -S ${DOCKER_SOCKET} ]; then
   usermod -aG ${DOCKER_GROUP} ${JENKINS_USER}
 fi
 
-curl -o /var/jenkins-slave/slave.jar http://${JENKINS_HOST}/jnlpJars/slave.jar
+
+get_slave_jar (){
+  while [ "$(curl -s -o /var/jenkins-slave/slave.jar -w "%{http_code}" http://${JENKINS_HOST}/jnlpJars/slave.jar)" -ne 200  ]
+  do
+    echo "Downloading jar..."
+    sleep 2
+  done
+}
+
+get_slave_jar
+
 exec su jenkins -c "java -jar /var/jenkins-slave/slave.jar -jnlpUrl http://${JENKINS_HOST}/computer/${AGENT_NAME}/slave-agent.jnlp"
